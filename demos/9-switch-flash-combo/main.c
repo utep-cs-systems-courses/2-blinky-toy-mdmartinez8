@@ -46,10 +46,10 @@ switch_interrupt_handler()
   P1IES &= (p1val | ~SWITCHES);	/* if switch down, sense up */
 
   if (p1val & SW1) {		/* button up */
-    P1OUT &= ~LED_GREEN;
+    P1OUT &= ~LED_RED; /*Used to be ~LED_GREEN */
     buttonDown = 0;
   } else {			/* button down */
-    P1OUT |= LED_GREEN;
+    P1OUT |= LED_RED;
     buttonDown = 1;
   }
 }
@@ -69,12 +69,12 @@ __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 {
   static int blink_count = 0;
   switch (blink_count) { 
-  case 6: 
+  case 240: /*Used to be case 6:*/
     blink_count = 0;
-    P1OUT |= LED_RED;
+    P1OUT ^= LED_GREEN;      /*Used to be P1OUT \= LED_GREEN*/
     break;
   default:
     blink_count ++;
-    if (!buttonDown) P1OUT &= ~LED_RED; /* don't blink off if button is down */
+    //if (!buttonDown) P1OUT &= ~LED_GREEN; /* don't blink off if button is down */
   }
 } 
