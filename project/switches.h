@@ -5,12 +5,18 @@
 #define SW2 BIT1                    /* switch 2 is p2.1*/
 #define SW3 BIT2                    /* switch 3 is p2.2*/
 #define SW4 BIT3                    /* switch 4 is p2.3*/
-#define SWITCHES SW1 SW2 SW3 SW4     /* 4 switches on this board */
+#define SWITCHES 15     /* 4 switches on this board */
 
 void switch_init();
 void switch_interrupt_handler();
-//void _interrupt_vec(PORT1_VECTOR) Port_1();
+void __interrupt_vec(PORT2_VECTOR) Port_2();
 
-extern char switch_state_down, switch_state_changed, switch_state_selector, no_led, red_led, green_led, both_led; /* effectively boolean for variables and switch statements*/
+extern char switch_state_down, switch_state_changed; /* effectively boolean for variables and switch statements*/
 
+/*These variables represent different states*/
+extern int switch_state_selector;
+/*extern int no_led = 1;
+extern int red_led = 2;
+extern int green_led = 3;
+extern int both_led = 4;*/
 #endif // included

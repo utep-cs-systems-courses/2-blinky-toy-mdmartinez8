@@ -4,8 +4,8 @@
 
 void led_init()
 {
-  P1DIR |= LEDS;		// bits attached to leds are output
-  switch_state_changed = 1;
+  P1DIR |= LEDS;// bits attached to leds are output
+  switch_state_changed = 0;
   led_update();
 }
 
@@ -15,23 +15,23 @@ void led_update(){
     //ledFlags |= switch_state_down ? LED_GREEN : 0;
     //ledFlags |= switch_state_down ? 0 : LED_RED;
     switch(switch_state_selector) {
-       case no_led:
-	 ledFlags |= ~LEDS;
+       case 1:
+	 ledFlags &= ~LEDS;
 	 break;
 
-       case red_led:
+       case 2:
 	 ledFlags |= LED_RED;
+	 ledFlags &= ~LED_GREEN;
 	 break;
 
-       case green_led:
-	 ledFlags |= LED_GREEN
+       case 3:
+	 ledFlags |= LED_GREEN;
+	 ledFlags &= ~LED_RED;
 	 break;
 
-       case both_led:
+       case 4:
 	 ledFlags |= LEDS;
 	 break;
-
-      default:
       
     }
     P1OUT &= (0xff - LEDS) | ledFlags; // clear bits for off leds

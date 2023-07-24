@@ -2,7 +2,8 @@
 #include "switches.h"
 #include "led.h"
 
-char switch_state_down, switch_state_changed, switch_state_selector, no_led, red_led, green_led, both_led;
+char switch_state_down, switch_state_changed;
+int switch_state_selector;
 
 static char 
 switch_update_interrupt_sense()
@@ -28,16 +29,22 @@ void
 switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();
-  switch_state_down = ((p2val & SW1)||(p2val & SW2)||(p2val & SW3)||(p2val & SW4)) ? 0 : 1; /* 0 when there are no switches being pressed */
-  if (p2val & ~SW1) {
-    switch_state_selector = no_led;
-  }else if (p2val & ~SW2) {
+  switch_state_down = ((p2val & SW1)&&(p2val & SW2)&&(p2val & SW3)&&(p2val & SW4)) ? 0 : 1; /* 0 when there are no switches being pressed */
+  if (~p2val & SW1) {
+    switch_state_selector = 1;     //no_led state
+  }else if (~p2val & SW2) {
+    switch_state_selector = 2;     //red_led state
+  }else if (~p2val & SW3) {
+    switch_state_selector = 3;     //green_led state
+  }else {
+    switch_state_selector = 4;     //both_led state
   }
   switch_state_changed = 1;
   led_update();
 }
 
-void _interrupt_vec(PORT1_VECTOR) Port_1(){
+void
+__interrupt_vec(PORT2_VECTOR) Port_2(){
 
   if (P2IFG & SWITCHES) { /*If one of the buttons caused interrupt, clear pending interrupts and call switch_interrupt_handler()*/
     P2IFG &= ~SWITCHES;
