@@ -23,11 +23,22 @@ static int blink_count = 0;
 void
 __interrupt_vec(WDT_VECTOR) WDT()
 {
+  
   switch (blink_count)
   {
     case 125:
       blink_count = 0;
       P1OUT ^= LEDS;
+      if (P1OUT & LED_RED) {
+	P1OUT |= LED_RED;
+	P1OUT &= ~LED_GREEN;
+	buzzer_set_period(5000);
+      }else{
+	P1OUT |= LED_GREEN;
+	P1OUT &= ~LED_RED;
+	buzzer_set_period(4000);
+      }
+
       break;
 
     default:

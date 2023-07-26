@@ -1,0 +1,22 @@
+	.arch
+	.p2align 1,0
+	.text
+
+	.global no_led
+	.extern P1OUT
+
+no_led:
+	mov #0, r12
+	pop r0
+
+red_led:
+	mov #1, r12
+	pop r0
+
+green_led:
+	mov #64, r12
+	pop r0
+
+both_led:
+	mov #65, r12
+	pop r0

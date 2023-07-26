@@ -1,6 +1,8 @@
 #include <msp430.h>
 #include "led.h"
 #include "switches.h"
+#include "buzzer.h"
+#include "states.h"
 
 void led_init()
 {
@@ -16,21 +18,23 @@ void led_update(){
     //ledFlags |= switch_state_down ? 0 : LED_RED;
     switch(switch_state_selector) {
        case 1:
-	 ledFlags &= ~LEDS;
+	 ledFlags = no_led();     //no_led state, no buzz
+	 buzzer_set_period(0);
 	 break;
 
        case 2:
-	 ledFlags |= LED_RED;
-	 ledFlags &= ~LED_GREEN;
+	 ledFlags = red_led();     //red_led state, red buzz
+	 buzzer_set_period(5000);
 	 break;
 
        case 3:
-	 ledFlags |= LED_GREEN;
-	 ledFlags &= ~LED_RED;
+	 ledFlags = green_led();     //green_led state, green buzz
+	 buzzer_set_period(4000);
 	 break;
 
        case 4:
-	 ledFlags |= LEDS;
+	 ledFlags = both_led();        //both_led state, combined buzz
+	 buzzer_set_period(2000);
 	 break;
       
     }

@@ -11,6 +11,6 @@ void led_init();		/* initialize LEDs */
 void led_update();		/* update leds */
 
 // these are boolean flags
-extern unsigned char leds_changed;
+extern unsigned char leds_changed, green_on;
 
 #endif
